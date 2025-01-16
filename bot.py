@@ -28,7 +28,7 @@ async def channel_message(event):
     if status[0] == "on":
         peer_id = event.original_update.message.peer_id.channel_id
         text = cur.execute("SELECT text FROM end_text").fetchone()[0]
-        await bot.edit_message(peer_id, event.message.id, event.raw_text + "\n\n" + text)
+        await bot.edit_message(peer_id, event.message.id, event.text + "\n\n" + text)
 @bot.on(events.CallbackQuery(data=b'show_text'))
 async def show_text(event):
     user_id = event.sender_id

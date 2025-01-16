@@ -3,8 +3,8 @@ api_id = 28482138
 api_hash = "cdcd9c0f111f85feaafac50d1bc3d6a5"
 proxy = True
 proxy_address = ("socks5", "127.0.0.1", 2080)
-admins = [5415792594]
-channel_id = "hoooosseinbot"
+admins = [5415792594, 198937863]
+channel_id = "crypto_newsir"
 
 
 bot_text = {

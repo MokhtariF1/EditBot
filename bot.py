@@ -3,9 +3,12 @@ from sqlite3 import connect
 import config
 
 
-bot = TelegramClient("robot", config.api_id, config.api_hash, proxy=None if config.proxy is False else config.proxy_address)
+bot = TelegramClient("bot", config.api_id, config.api_hash,
+                     proxy=None if config.proxy is False else config.proxy_address)
 print("connecting...")
 bot.start(bot_token=config.bot_token)
+# bot.start()
+# bot.connect()
 print("connected!")
 db = connect('bot.db')
 cur = db.cursor()
@@ -22,13 +25,19 @@ async def new_message(event):
                 Button.inline(bot_text["show_text"], b'show_text')
             ]
             await event.reply(bot_text["start"], buttons=buttons)
+
+
 @bot.on(events.NewMessage(chats=config.channel_id))
 async def channel_message(event):
+    print(event.text)
+    e = event.message.entities
+    text_msg = event.message.text
     status = cur.execute("SELECT status FROM end_text").fetchone()
     if status[0] == "on":
         peer_id = event.original_update.message.peer_id.channel_id
         text = cur.execute("SELECT text FROM end_text").fetchone()[0]
-        await bot.edit_message(peer_id, event.message.id, event.text + "\n\n" + text)
+        await bot.edit_message(peer_id, event.message.id, text_msg + "\n\n" + text, formatting_entities=e)
+
 @bot.on(events.CallbackQuery(data=b'show_text'))
 async def show_text(event):
     user_id = event.sender_id
@@ -46,6 +55,8 @@ async def show_text(event):
         ]
     ]
     await event.reply(bot_text["text_info"].format(text=text), buttons=buttons)
+
+
 @bot.on(events.CallbackQuery(data=b'change_status'))
 async def change_status(event):
     user_id = event.sender_id
@@ -78,6 +89,8 @@ async def change_status(event):
         cur.execute(f"UPDATE end_text SET status = 'on'")
         db.commit()
         await bot.edit_message(user_id, msg_id, bot_text["text_info"].format(text=text[0]), buttons=buttons)
+
+
 @bot.on(events.CallbackQuery(data=b'edit_text'))
 async def edit_text(event):
     user_id = event.sender_id

@@ -3,7 +3,7 @@ from sqlite3 import connect
 import config
 
 
-bot = TelegramClient("bot", config.api_id, config.api_hash,
+bot = TelegramClient("robot", config.api_id, config.api_hash,
                      proxy=None if config.proxy is False else config.proxy_address)
 print("connecting...")
 bot.start(bot_token=config.bot_token)
@@ -26,18 +26,34 @@ async def new_message(event):
             ]
             await event.reply(bot_text["start"], buttons=buttons)
 
-
 @bot.on(events.NewMessage(chats=config.channel_id))
 async def channel_message(event):
-    print(event.text)
-    e = event.message.entities
-    text_msg = event.message.text
+    # print(event.text)
+    e = event.message.entities  # Get the entities from the message
+    text_msg = event.raw_text
+    
+    # Prepare to store formatted message
+    formatted_message = text_msg
     status = cur.execute("SELECT status FROM end_text").fetchone()
     if status[0] == "on":
         peer_id = event.original_update.message.peer_id.channel_id
         text = cur.execute("SELECT text FROM end_text").fetchone()[0]
-        await bot.edit_message(peer_id, event.message.id, text_msg + "\n\n" + text, formatting_entities=e)
 
+        # Send the complete message with the formatted hyperlink
+        complete_message = f"{formatted_message}\n\n{text}"
+        print(e)
+        # Edit the message with Markdown formatting
+        await bot.edit_message(peer_id, event.message.id, complete_message, parse_mode='markdown', formatting_entities=e)
+
+# @bot.on(events.NewMessage(chats=config.channel_id))
+# async def channel_message(event):
+#     e = event.message.entities
+#     text_msg = event.text
+#     status = cur.execute("SELECT status FROM end_text").fetchone()
+#     if status[0] == "on":
+#         peer_id = event.original_update.message.peer_id.channel_id
+#         text = cur.execute("SELECT text FROM end_text").fetchone()[0]
+#         await bot.send_message(peer_id, event.raw_text + "\n\n" + text, formatting_entities=event.message.entities)
 @bot.on(events.CallbackQuery(data=b'show_text'))
 async def show_text(event):
     user_id = event.sender_id

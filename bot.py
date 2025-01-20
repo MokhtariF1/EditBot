@@ -114,7 +114,7 @@ async def edit_text(event):
         back = Button.text(bot_text["back"], resize=1)
         await conv.send_message(bot_text["enter_text"], buttons=back)
         text = await conv.get_response()
-        text = text.raw_text
+        text = text.text
         if text == bot_text["back"]:
             await conv.send_message(bot_text["canceled"])
             return

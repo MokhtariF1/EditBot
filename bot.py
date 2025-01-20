@@ -30,7 +30,7 @@ async def new_message(event):
 async def channel_message(event):
     # print(event.text)
     e = event.message.entities  # Get the entities from the message
-    text_msg = event.raw_text
+    text_msg = event.text
     
     # Prepare to store formatted message
     formatted_message = text_msg
@@ -43,7 +43,7 @@ async def channel_message(event):
         complete_message = f"{formatted_message}\n\n{text}"
         print(e)
         # Edit the message with Markdown formatting
-        await bot.edit_message(peer_id, event.message.id, complete_message, formatting_entities=e)
+        await bot.edit_message(peer_id, event.message.id, complete_message)
 
 # @bot.on(events.NewMessage(chats=config.channel_id))
 # async def channel_message(event):

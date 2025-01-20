@@ -13,7 +13,7 @@ print("connected!")
 db = connect('bot.db')
 cur = db.cursor()
 bot_text = config.bot_text
-
+bot.parse_mode = "html"
 
 @bot.on(events.NewMessage())
 async def new_message(event):

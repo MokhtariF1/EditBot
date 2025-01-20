@@ -3,7 +3,7 @@ if env:
     bot_token = "7711319167:AAF9c7J9NeFuH16sO_HIrbDSWMuExYxEuks"
     api_id = 28482138
     api_hash = "cdcd9c0f111f85feaafac50d1bc3d6a5"
-    proxy = True
+    proxy = False
     proxy_address = ("socks5", "127.0.0.1", 2080)
     admins = [5415792594, 198937863]
     channel_id = "crypto_newsir"

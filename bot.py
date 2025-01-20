@@ -43,7 +43,7 @@ async def channel_message(event):
         complete_message = f"{formatted_message}\n\n{text}"
         print(e)
         # Edit the message with Markdown formatting
-        await bot.edit_message(peer_id, event.message.id, complete_message, parse_mode='markdown', formatting_entities=e)
+        await bot.edit_message(peer_id, event.message.id, complete_message, formatting_entities=e)
 
 # @bot.on(events.NewMessage(chats=config.channel_id))
 # async def channel_message(event):
